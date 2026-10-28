@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- 前台服务保活（环境常驻） -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- 电池优化豁免（保活引导） -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- 本地代理（Hosts 劫持）监听 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 代理检测可能访问本地网络 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- 截图/验证码识别用（检测报告取证） -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:name=".GeoEnvApp"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.GeoEnv"
+        android:largeHeap="true"
+        tools:targetApi="34">
+
+        <!-- 主界面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Gecko 槽位进程：每槽位独立子进程 :gecko1 ~ :gecko5
+            架构说明（与 docs/geo-env-tech.md 的"单进程"表述存在偏离）：
+            GeckoRuntime 在一个进程内只允许存在一个实例（Only one GeckoRuntime instance is allowed），
+            且代理 / Marionette 端口 / 时区 / 语言等 prefs 均为进程级生效。
+            为同时满足"并发运行 3 个环境（可放开至 5）"以及每环境独立的
+            代理、Marionette 端口、时区语言与 profile 隔离，采用多进程槽位架构。
+        -->
+        <activity
+            android:name=".slot.SlotActivity1"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:process=":gecko1"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv.Slot" />
+        <activity
+            android:name=".slot.SlotActivity2"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:process=":gecko2"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv.Slot" />
+        <activity
+            android:name=".slot.SlotActivity3"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv.Slot" />
+        <activity
+            android:name=".slot.SlotActivity4"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:process=":gecko4"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv.Slot" />
+        <activity
+            android:name=".slot.SlotActivity5"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:process=":gecko5"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode|density|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GeoEnv.Slot" />
+
+        <!-- 保活前台服务 -->
+        <service
+            android:name=".service.KeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_environment_keepalive" />
+        </service>
+
+        <!-- 槽位宿主服务（每槽位独立进程，承接主进程 IPC 命令并持有 GeckoRuntime） -->
+        <service
+            android:name=".slot.SlotHostService1"
+            android:exported="false"
+            android:process=":gecko1"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_slot_host" />
+        </service>
+        <service
+            android:name=".slot.SlotHostService2"
+            android:exported="false"
+            android:process=":gecko2"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_slot_host" />
+        </service>
+        <service
+            android:name=".slot.SlotHostService3"
+            android:exported="false"
+            android:process=":gecko3"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_slot_host" />
+        </service>
+        <service
+            android:name=".slot.SlotHostService4"
+            android:exported="false"
+            android:process=":gecko4"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_slot_host" />
+        </service>
+        <service
+            android:name=".slot.SlotHostService5"
+            android:exported="false"
+            android:process=":gecko5"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="gecko_slot_host" />
+        </service>
+
+        <!-- 开机自启（环境常驻） -->
+        <receiver
+            android:name=".service.BootReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

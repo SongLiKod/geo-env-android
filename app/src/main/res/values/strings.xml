@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GeoEnv</string>
+    <string name="app_full_name">GeoEnv 指纹隔离环境浏览器</string>
+
+    <!-- 底部导航 -->
+    <string name="nav_environments">环境</string>
+    <string name="nav_accounts">账号</string>
+    <string name="nav_proxies">代理</string>
+    <string name="nav_audit">审计</string>
+    <string name="nav_settings">设置</string>
+
+    <!-- 通用 -->
+    <string name="action_add">新增</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_delete">删除</string>
+    <string name="action_save">保存</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_confirm">确定</string>
+    <string name="action_search">搜索</string>
+    <string name="action_import">导入</string>
+    <string name="action_export">导出</string>
+    <string name="action_copy">复制</string>
+    <string name="action_open">打开</string>
+    <string name="action_close">关闭</string>
+    <string name="action_start">启动</string>
+    <string name="action_stop">停止</string>
+    <string name="action_test">检测</string>
+    <string name="action_refresh">刷新</string>
+    <string name="empty_list">暂无数据</string>
+    <string name="loading">加载中…</string>
+
+    <!-- 通知 -->
+    <string name="notification_channel_keepalive">环境保活</string>
+    <string name="notification_channel_memory">内存告警</string>
+    <string name="notification_keepalive_text">GeoEnv 环境正在运行</string>
+    <string name="notif_slot_channel">环境运行</string>
+    <string name="notif_slot_title">环境槽位 %1$d 运行中</string>
+    <string name="notif_slot_text">Gecko 引擎与本地代理正在运行</string>
+    <string name="notif_memory_warning">内存不足，已提醒关闭部分环境</string>
+    <string name="notif_memory_high_title">内存偏高</string>
+    <string name="notif_memory_high_text">已用 %1$d / %2$d MB，建议关闭闲置环境</string>
+    <string name="notif_memory_critical_title">内存临界</string>
+    <string name="notif_memory_critical_text">已自动关闭部分闲置环境</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主题主色由运行时 DataStore 覆盖，此处为默认值（蓝） -->
+    <color name="geoenv_primary">#1E6FFF</color>
+    <color name="geoenv_primary_dark">#1552C4</color>
+    <color name="geoenv_secondary">#5B8DEF</color>
+    <color name="geoenv_background_light">#F7F8FA</color>
+    <color name="geoenv_background_dark">#101318</color>
+    <color name="geoenv_surface_light">#FFFFFF</color>
+    <color name="geoenv_surface_dark">#171B22</color>
+    <color name="geoenv_on_primary">#FFFFFF</color>
+    <color name="geoenv_error">#D93025</color>
+    <color name="geoenv_success">#188038</color>
+    <color name="geoenv_warning">#E37400</color>
+    <color name="geoenv_status_running">#188038</color>
+    <color name="geoenv_status_stopped">#9AA0A6</color>
+    <color name="geoenv_status_error">#D93025</color>
+    <color name="geoenv_status_starting">#E37400</color>
+    <color name="ic_launcher_background">#1E6FFF</color>
+</resources>

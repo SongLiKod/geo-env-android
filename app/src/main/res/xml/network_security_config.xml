@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  代理检测 / 本地代理转发可能使用明文 HTTP（内部环境），
+  按需求允许明文流量；正式发布可在后续收紧为仅代理端口放行。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
